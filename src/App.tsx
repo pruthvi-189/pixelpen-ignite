@@ -11,6 +11,7 @@ import About from "./pages/About";
 import Events from "./pages/Events";
 import Founder from "./pages/Founder";
 import Partners from "./pages/Partners";
+import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ function AnimatedRoutes() {
           <Route path="/events" element={<Events />} />
           <Route path="/founder" element={<Founder />} />
           <Route path="/partners" element={<Partners />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>
