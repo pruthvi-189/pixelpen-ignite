@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/new logo for startup.png";
 
 const links = [
   { to: "/", label: "Home" },

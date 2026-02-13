@@ -26,7 +26,7 @@ function FloatingText({ text, position, mouse }: { text: string; position: [numb
     c.width = w;
     c.height = h;
     ctx.font = `${fontSize}px Inter, sans-serif`;
-    ctx.fillStyle = "rgba(198, 167, 94, 0.12)";
+    ctx.fillStyle = "rgba(198, 167, 94, 1)";
     ctx.fillText(text, 8, fontSize + 4);
     return c;
   }, [text]);
@@ -58,15 +58,15 @@ function FloatingText({ text, position, mouse }: { text: string; position: [numb
 }
 
 function Particles({ mouse }: { mouse: React.MutableRefObject<[number, number]> }) {
-  const count = 120;
-  const mesh = useRef<THREE.Points>(null);
+  const count = 5000;
+  const mesh = useRef<THREE.Points>(null); 
 
   const positions = useMemo(() => {
     const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 10;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 10;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 5;
+      pos[i * 3] = (Math.random() - 0.5) * 22;  // wider X
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 14; // taller Y
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 10; // deeper Z
     }
     return pos;
   }, []);
@@ -80,7 +80,7 @@ function Particles({ mouse }: { mouse: React.MutableRefObject<[number, number]> 
   const velocities = useMemo(() => {
     const vel = new Float32Array(count * 3);
     for (let i = 0; i < count * 3; i++) {
-      vel[i] = (Math.random() - 0.5) * 0.005;
+      vel[i] = (Math.random() - 0.5) * 0.001;
     }
     return vel;
   }, []);
@@ -89,18 +89,45 @@ function Particles({ mouse }: { mouse: React.MutableRefObject<[number, number]> 
     if (!mesh.current) return;
     const posAttr = geo.attributes.position as THREE.BufferAttribute;
     const arr = posAttr.array as Float32Array;
-    for (let i = 0; i < count * 3; i++) {
-      arr[i] += velocities[i];
-      if (Math.abs(arr[i]) > 5) velocities[i] *= -1;
-    }
-    posAttr.needsUpdate = true;
-    mesh.current.rotation.x = mouse.current[1] * 0.1;
-    mesh.current.rotation.y = mouse.current[0] * 0.1;
+    for (let i = 0; i < count; i++) {
+  const ix = i * 3;
+  const iy = i * 3 + 1;
+  const iz = i * 3 + 2;
+
+  // Normal movement
+  arr[ix] += velocities[ix];
+  arr[iy] += velocities[iy];
+  arr[iz] += velocities[iz];
+
+  if (Math.abs(arr[ix]) > 12) velocities[ix] *= -1;
+  if (Math.abs(arr[iy]) > 8) velocities[iy] *= -1;
+  if (Math.abs(arr[iz]) > 6) velocities[iz] *= -1;
+
+
+  // Mouse influence (localized)
+  const mouseX = mouse.current[0] * 10;
+  const mouseY = mouse.current[1] * 6;
+
+  const dx = arr[ix] - mouseX;
+  const dy = arr[iy] - mouseY;
+
+  const distance = Math.sqrt(dx * dx + dy * dy);
+
+  const radius = 2; // small interaction radius (~3cm effect)
+
+  if (distance < radius) {
+    const force = (radius - distance) * 0.02;
+    arr[ix] += dx * force;
+    arr[iy] += dy * force;
+  }
+}
+
+    posAttr.needsUpdate = true; 
   });
 
   return (
     <points ref={mesh} geometry={geo}>
-      <pointsMaterial size={0.04} color="#C6A75E" transparent opacity={0.7} sizeAttenuation />
+      <pointsMaterial size={0.06} color="#FFD700" transparent opacity={0.9} sizeAttenuation />
     </points>
   );
 }
@@ -109,12 +136,12 @@ function Lines({ mouse }: { mouse: React.MutableRefObject<[number, number]> }) {
   const lineRef = useRef<THREE.LineSegments>(null);
 
   const geo = useMemo(() => {
-    const count = 40;
+    const count = 999;
     const pos = new Float32Array(count * 6);
     for (let i = 0; i < count; i++) {
-      const x1 = (Math.random() - 0.5) * 8;
-      const y1 = (Math.random() - 0.5) * 8;
-      const z1 = (Math.random() - 0.5) * 3;
+        const x1 = (Math.random() - 0.5) * 20;
+        const y1 = (Math.random() - 0.5) * 14;
+        const z1 = (Math.random() - 0.5) * 8;
       pos[i * 6] = x1;
       pos[i * 6 + 1] = y1;
       pos[i * 6 + 2] = z1;
@@ -129,14 +156,12 @@ function Lines({ mouse }: { mouse: React.MutableRefObject<[number, number]> }) {
 
   useFrame(({ clock }) => {
     if (lineRef.current) {
-      lineRef.current.rotation.y = Math.sin(clock.elapsedTime * 0.1) * 0.1 + mouse.current[0] * 0.08;
-      lineRef.current.rotation.x = Math.cos(clock.elapsedTime * 0.08) * 0.05 + mouse.current[1] * 0.08;
     }
   });
 
   return (
     <lineSegments ref={lineRef} geometry={geo}>
-      <lineBasicMaterial color="#C6A75E" transparent opacity={0.15} />
+      <lineBasicMaterial color="#C6A75E" transparent opacity={0.55} />
     </lineSegments>
   );
 }
@@ -152,12 +177,9 @@ function SceneContent({ mouse }: { mouse: React.MutableRefObject<[number, number
 
   return (
     <>
-      <ambientLight intensity={0.3} />
+      <ambientLight intensity={0.9} />
       <Particles mouse={mouse} />
       <Lines mouse={mouse} />
-      {keywords.map((kw, i) => (
-        <FloatingText key={kw} text={kw} position={textPositions[i]} mouse={mouse} />
-      ))}
     </>
   );
 }
@@ -177,7 +199,7 @@ export default function HeroScene() {
   }, []);
 
   return (
-    <div className="absolute inset-0 z-0">
+    <div className="absolute inset-0 w-full h-full -z-10">
       <Canvas
         camera={{ position: [0, 0, 5], fov: 60 }}
         dpr={[1, 1.5]}

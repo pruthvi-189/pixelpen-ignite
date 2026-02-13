@@ -3,7 +3,7 @@ import { Phone, Mail, Linkedin, Instagram, MessageCircle, MapPin, Send } from "l
 import AnimatedSection from "@/components/AnimatedSection";
 
 const contactInfo = [
-  { icon: Phone, label: "Phone", value: "+91 XXXXX XXXXX", href: "tel:+91XXXXXXXXXX" },
+  { icon: Phone, label: "Phone", value: "+91 7022363858", href: "tel:+91 7022363858" },
   { icon: Mail, label: "Email", value: "contact@pixelpen.in", href: "mailto:contact@pixelpen.in" },
   { icon: Linkedin, label: "LinkedIn", value: "PixelPen", href: "https://linkedin.com/company/pixelpen" },
   { icon: Instagram, label: "Instagram", value: "@pixelpen.in", href: "https://instagram.com/pixelpen.in" },

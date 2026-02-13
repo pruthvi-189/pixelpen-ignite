@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Brain, Wrench, Users, Rocket } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/new logo for startup.png";
 
 const HeroScene = lazy(() => import("@/components/HeroScene"));
 
