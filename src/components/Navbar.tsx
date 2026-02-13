@@ -9,6 +9,7 @@ const links = [
   { to: "/events", label: "Events" },
   { to: "/founder", label: "Founder" },
   { to: "/partners", label: "Partners" },
+  { to: "/contact", label: "Contact" },
 ];
 
 export default function Navbar() {
