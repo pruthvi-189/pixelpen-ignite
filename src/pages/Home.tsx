@@ -37,7 +37,7 @@ export default function Home() {
         <div className="absolute inset-0 z-[1] bg-gradient-to-b from-background/60 via-background/80 to-background" />
 
         <motion.div
-          className="relative z-10 flex flex-col items-center px-6 text-center"
+          className="relative z-10 flex flex-col items-center px-6 text-center mt-12 md:mt-16"
           variants={stagger}
           initial="hidden"
           animate="visible"
@@ -45,7 +45,7 @@ export default function Home() {
           <motion.img
             src={logo}
             alt="PixelPen Logo"
-            className="mb-8 h-24 w-24 animate-float"
+            className="mb-10 h-40 w-40 md:h-52 md:w-52 lg:h-60 lg:w-60 object-contain animate-float mx-auto"
             variants={fadeUp}
           />
           <motion.h1

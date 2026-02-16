@@ -4,7 +4,7 @@ import AnimatedSection from "@/components/AnimatedSection";
 
 const contactInfo = [
   { icon: Phone, label: "Phone", value: "+91 7022363858", href: "tel:+91 7022363858" },
-  { icon: Mail, label: "Email", value: "contact@pixelpen.in", href: "mailto:contact@pixelpen.in" },
+  { icon: Mail, label: "Email", value: "pixelpen36@gmail.com", href: "mailto:pixelpen36@gmail.com" },
   { icon: Linkedin, label: "LinkedIn", value: "PixelPen", href: "https://linkedin.com/company/pixelpen" },
   { icon: Instagram, label: "Instagram", value: "@pixelpen.in", href: "https://instagram.com/pixelpen.in" },
   { icon: MessageCircle, label: "WhatsApp Channel", value: "Join our channel", href: "https://whatsapp.com/channel/pixelpen" },
