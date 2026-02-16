@@ -6,9 +6,10 @@ interface EventCardProps {
   date: string;
   venue: string;
   index: number;
+  isCompleted?: boolean;
 }
 
-export default function EventCard({ title, date, venue, index }: EventCardProps) {
+export default function EventCard({ title, date, venue, index, isCompleted }: EventCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -16,7 +17,9 @@ export default function EventCard({ title, date, venue, index }: EventCardProps)
       viewport={{ once: true }}
       transition={{ duration: 0.6, delay: index * 0.15 }}
       whileHover={{ y: -8, scale: 1.02 }}
-      className="group relative overflow-hidden rounded-lg border border-gold/20 bg-card p-6 transition-shadow duration-500 hover:glow-gold"
+      className={`group relative overflow-hidden rounded-lg border border-gold/20 bg-card p-6 transition-shadow duration-500 hover:glow-gold ${
+        isCompleted ? "opacity-60" : ""
+      }`}
       style={{ background: "var(--gradient-card)" }}
     >
       {/* Gold accent line */}
