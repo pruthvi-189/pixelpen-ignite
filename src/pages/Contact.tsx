@@ -8,7 +8,7 @@ const contactInfo = [
   { icon: Linkedin, label: "LinkedIn", value: "PixelPen", href: "https://www.linkedin.com/company/pixelpen/" },
   { icon: Instagram, label: "Instagram", value: "pixelpen36", href: "https://www.instagram.com/pixelpen36?igsh=MThjaGNleGh2YjFubQ%3D%3D&utm_source=qr" },
   { icon: MessageCircle, label: "WhatsApp Channel", value: "PixelPen", href: "https://whatsapp.com/channel/0029Vb6zvxL1Hsq3aq9FZf45" },
-  { icon: MapPin, label: "Location", value: "Bangalore Technological Institute, Bengaluru", href: "#" },
+  { icon: MapPin, label: "Location", value: "Bangalore Technological Institute, Bengaluru", href: " https://maps.app.goo.gl/KEQbFyE8R8j9QPme7?g_st=iw" },
 ];
 
 const fadeUp = {
