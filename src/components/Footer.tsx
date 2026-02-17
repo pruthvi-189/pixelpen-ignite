@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 
 const socialLinks = [
-  { label: "LinkedIn", href: "#" },
-  { label: "Instagram", href: "#" },
-  { label: "Twitter", href: "#" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/pixelpen/" },
+  { label: "Instagram", href: "https://www.instagram.com/pixelpen36?igsh=MThjaGNleGh2YjFubQ%3D%3D&utm_source=qr" },
+  { label: "Whatsapp", href: "https://whatsapp.com/channel/0029Vb6zvxL1Hsq3aq9FZf45" },
 ];
 
 export default function Footer() {
