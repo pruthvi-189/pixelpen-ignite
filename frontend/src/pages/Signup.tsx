@@ -1,5 +1,6 @@
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/lib/supabase";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -12,54 +13,36 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
 
   const handleSignup = async (e: FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  setLoading(true);
+    e.preventDefault();
+    setLoading(true);
 
-  if (password !== confirmPassword) {
-    alert("Passwords do not match");
-    setLoading(false);
-    return;
-  }
-
-  // Split full name
-  const nameParts = fullName.trim().split(" ");
-  const first_name = nameParts[0];
-  const last_name = nameParts.slice(1).join(" ") || "";
-
-  try {
-    const response = await fetch("http://localhost:5000/api/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        first_name,
-        last_name,
-        mobile_number: mobile,
-        email,
-        password,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      alert(data.message);
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
       setLoading(false);
       return;
     }
 
-    alert("Signup successful!");
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: fullName,
+          mobile_number: mobile,
+        },
+      },
+    });
+
+    if (error) {
+      alert(error.message);
+      setLoading(false);
+      return;
+    }
+
+    alert("Signup successful! Please check your email.");
     navigate("/login");
-
-  } catch (error) {
-    console.error("Signup Error:", error);
-    alert("Something went wrong");
-  } finally {
     setLoading(false);
-  }
-};
-
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-black text-white">

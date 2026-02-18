@@ -1,20 +1,21 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { supabase } from "@/lib/supabase";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const { user, profile, loading } = useAuth();
 
-  useEffect(() => {
-    const token = localStorage.getItem("adminToken"); // ✅ FIXED KEY
+  if (loading) return null;
 
-    if (!token) {
-      navigate("/admin/login");
-    }
-  }, [navigate]);
+  if (!user || profile?.role !== "admin") {
+    navigate("/");
+    return null;
+  }
 
-  const handleLogout = () => {
-    localStorage.removeItem("adminToken"); // ✅ FIXED KEY
-    navigate("/admin/login");
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate("/");
   };
 
   return (

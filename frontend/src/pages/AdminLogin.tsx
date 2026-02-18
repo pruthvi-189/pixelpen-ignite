@@ -1,107 +1,103 @@
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/context/AuthContext";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
+  const { profile } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+
+    if (!email || !password) {
+      alert("Please fill all fields");
+      return;
+    }
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+      setLoading(true);
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        alert(data.message);
-        setLoading(false);
+      if (error) {
+        alert(error.message);
         return;
       }
 
-      // Decode token to check role
-      const payload = JSON.parse(
-        atob(data.token.split(".")[1])
-      );
+      // Small delay to allow AuthContext to update
+      setTimeout(() => {
+        if (profile?.role === "admin") {
+          navigate("/admin-dashboard");
+        } else {
+          navigate("/");
+        }
+      }, 500);
 
-      if (payload.role !== "admin") {
-        alert("Access denied. Not an admin.");
-        setLoading(false);
-        return;
-      }
-
-      // Save token
-      localStorage.setItem("adminToken", data.token);
-
-      navigate("/admin/dashboard");
-
-    } catch (error) {
-      console.error("Login Error:", error);
-      alert("Something went wrong");
+    } catch (err) {
+      alert("Login failed");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black text-white">
-      <form
-        onSubmit={handleLogin}
-        className="bg-gray-900 p-8 rounded-xl w-96 shadow-lg"
-      >
-        <h2 className="text-2xl font-bold mb-6 text-center">
-          Login
-        </h2>
+    <div className="min-h-screen bg-black flex justify-center items-center">
+      <div className="bg-gray-900 p-8 rounded-xl w-96 shadow-lg">
+        <h2 className="text-2xl text-white text-center mb-6">Login</h2>
 
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full p-3 mb-4 rounded bg-gray-800 border border-gray-700"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            className="w-full mb-4 p-3 rounded bg-gray-800 text-white"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full p-3 mb-6 rounded bg-gray-800 border border-gray-700"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <input
+            type="password"
+            placeholder="Enter your password"
+            className="w-full mb-4 p-3 rounded bg-gray-800 text-white"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-        <button
-          type="submit"
-          className="w-full bg-purple-600 hover:bg-purple-700 p-3 rounded font-semibold"
-          disabled={loading}
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
+          <p
+            className="text-sm text-right text-purple-400 cursor-pointer mb-4"
+            onClick={() => navigate("/forgot-password")}
+          >
+            Forgot Password?
+          </p>
 
-        <p className="text-sm text-center mt-4">
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-purple-600 hover:bg-purple-700 transition py-3 rounded text-white font-semibold"
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+
+        <p className="text-center text-gray-400 mt-4 text-sm">
           Don’t have an account?{" "}
           <span
-            className="text-purple-400 cursor-pointer hover:underline"
+            className="text-purple-400 cursor-pointer"
             onClick={() => navigate("/signup")}
           >
             Signup
           </span>
         </p>
-      </form>s
+      </div>
     </div>
   );
 };
-
 
 export default AdminLogin;

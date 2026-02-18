@@ -22,10 +22,10 @@ export const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const result = await pool.query(
-      `INSERT INTO users (first_name, last_name, mobile_number, email, password)
-       VALUES ($1, $2, $3, $4, $5)
-       RETURNING id, first_name, last_name, mobile_number, email`,
-      [first_name, last_name, mobile_number, email, hashedPassword]
+      `INSERT INTO users (first_name, last_name, mobile_number, email, password, role)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING id, first_name, last_name, mobile_number, email, role`,
+      [first_name, last_name, mobile_number, email, hashedPassword, "user"]
     );
 
     res.status(201).json({
@@ -61,17 +61,26 @@ export const loginUser = async (req, res) => {
     }
 
     const token = jwt.sign(
-    {
-      id: user.id,
-      email: user.email,
-      role: user.role, // 👈 ADD THIS
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: "1d" }
-  );
-    res.json({
+      {
+        id: user.id,
+        email: user.email,
+        role: user.role || "user",
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    // 🔥 IMPORTANT: Return user object also
+    res.status(200).json({
       message: "Login successful",
       token,
+      user: {
+        id: user.id,
+        fullName: user.first_name + " " + user.last_name,
+        email: user.email,
+        mobile_number: user.mobile_number,
+        role: user.role || "user",
+      },
     });
 
   } catch (error) {

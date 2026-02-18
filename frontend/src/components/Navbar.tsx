@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { UserPlus } from "lucide-react";
+import { UserPlus, User, LogOut, Settings } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { supabase } from "@/lib/supabase";
 import logo from "@/assets/new logo for startup.png";
 
 const links = [
@@ -16,8 +18,12 @@ const links = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+
   const location = useLocation();
   const navigate = useNavigate();
+
+  const { user, profile } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -25,7 +31,15 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => setMobileOpen(false), [location]);
+  useEffect(() => {
+    setMobileOpen(false);
+    setProfileOpen(false);
+  }, [location]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate("/");
+  };
 
   return (
     <motion.nav
@@ -61,40 +75,102 @@ export default function Navbar() {
               {link.label}
               <span
                 className={`absolute -bottom-1 left-0 h-[2px] bg-[#d4af37] transition-all duration-300 ${
-                  location.pathname === link.to
-                    ? "w-full"
-                    : "w-0 group-hover:w-full"
+                  location.pathname === link.to ? "w-full" : "w-0"
                 }`}
               />
             </Link>
           ))}
 
-          {/* 🔥 PREMIUM SIGNUP BUTTON */}
-          <motion.button
-            onClick={() => navigate("/signup")}
-            whileHover={{ scale: 1.12 }}
-            whileTap={{ scale: 0.95 }}
-            className="relative ml-4 flex items-center justify-center 
-                       h-11 w-11 rounded-full 
-                       bg-gradient-to-br from-[#f5d76e] via-[#d4af37] to-[#a67c00]
-                       shadow-md hover:shadow-xl
-                       transition-all duration-300"
-          >
-            {/* Shine effect */}
-            <span className="absolute inset-0 rounded-full overflow-hidden">
-              <span className="absolute top-0 left-[-75%] h-full w-1/2 bg-white/20 rotate-12 
-                               animate-[shine_2.5s_infinite]" />
-            </span>
+          {/* 🔥 AUTH SECTION */}
+          {!user ? (
+            <motion.button
+              onClick={() => navigate("/signup")}
+              whileHover={{ scale: 1.12 }}
+              whileTap={{ scale: 0.95 }}
+              className="relative ml-4 flex items-center justify-center 
+                         h-11 w-11 rounded-full 
+                         bg-gradient-to-br from-[#f5d76e] via-[#d4af37] to-[#a67c00]
+                         shadow-md hover:shadow-xl transition-all duration-300"
+            >
+              <span className="absolute inset-0 rounded-full overflow-hidden">
+                <span className="absolute top-0 left-[-75%] h-full w-1/2 bg-white/20 rotate-12 animate-[shine_2.5s_infinite]" />
+              </span>
 
-            <UserPlus size={18} strokeWidth={2.5} className="text-black z-10" />
-          </motion.button>
+              <UserPlus size={18} strokeWidth={2.5} className="text-black z-10" />
+            </motion.button>
+          ) : (
+            <div className="relative ml-4">
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setProfileOpen(!profileOpen)}
+                className="h-11 w-11 rounded-full 
+                           bg-gradient-to-br from-[#f5d76e] via-[#d4af37] to-[#a67c00]
+                           flex items-center justify-center"
+              >
+                <User size={18} className="text-black" />
+              </motion.button>
+
+              <AnimatePresence>
+                {profileOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="absolute right-0 mt-3 w-64 bg-black/95 backdrop-blur-xl 
+                               rounded-xl shadow-2xl border border-gray-800 p-4"
+                  >
+                    <p className="text-white font-semibold">
+                      {profile?.full_name}
+                    </p>
+                    <p className="text-gray-400 text-sm">
+                      {user.email}
+                    </p>
+
+                    {profile?.role === "admin" && (
+                      <p className="mt-1 text-xs text-[#d4af37]">
+                        Admin Account
+                      </p>
+                    )}
+
+                    <div className="mt-4 border-t border-gray-700 pt-3 flex flex-col gap-3">
+                      <button
+                        onClick={() => navigate("/profile")}
+                        className="flex items-center gap-2 text-sm text-gray-300 hover:text-white"
+                      >
+                        <Settings size={16} />
+                        Edit Profile
+                      </button>
+
+                      {profile?.role === "admin" && (
+                        <button
+                          onClick={() => navigate("/admin-dashboard")}
+                          className="flex items-center gap-2 text-sm text-gray-300 hover:text-white"
+                        >
+                          <User size={16} />
+                          Admin Dashboard
+                        </button>
+                      )}
+
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-2 text-sm text-red-400 hover:text-red-500"
+                      >
+                        <LogOut size={16} />
+                        Logout
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
         </div>
 
         {/* Mobile Toggle */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
           className="flex flex-col gap-1.5 md:hidden"
-          aria-label="Toggle menu"
         >
           <span className="block h-[2px] w-6 bg-white" />
           <span className="block h-[2px] w-6 bg-white" />
@@ -102,40 +178,6 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="bg-black/90 backdrop-blur-md md:hidden"
-          >
-            <div className="flex flex-col gap-4 px-6 py-6">
-              {links.map((link) => (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className="text-gray-300 hover:text-white"
-                >
-                  {link.label}
-                </Link>
-              ))}
-
-              <button
-                onClick={() => navigate("/signup")}
-                className="mt-2 rounded-lg bg-gradient-to-r 
-                           from-[#f5d76e] to-[#d4af37] 
-                           text-black py-2 font-semibold"
-              >
-                Signup
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* 🔥 Shine Animation Keyframe */}
       <style>
         {`
           @keyframes shine {

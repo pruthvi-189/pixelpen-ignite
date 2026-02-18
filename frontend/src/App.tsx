@@ -16,11 +16,16 @@ import Partners from "./pages/Partners";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import Signup from "./pages/Signup";
-
-
-import AdminLogin from "./pages/AdminLogin";
+import AdminLogin from "./pages/AdminLogin"; // You can rename to Login later
 import AdminDashboard from "./pages/AdminDashboard";
+import Profile from "./pages/Profile";
+
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./pages/AdminRoute";
+
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+
 
 const queryClient = new QueryClient();
 
@@ -46,21 +51,31 @@ function AnimatedRoutes() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<AdminLogin />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
 
-          {/* Admin Routes */}
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/signup" element={<Signup />} />
-
+          {/* Protected User Routes */}
           <Route
-            path="/admin/dashboard"
+            path="/profile"
             element={
               <ProtectedRoute>
-                <AdminDashboard />
+                <Profile />
               </ProtectedRoute>
             }
           />
 
+          {/* Admin Only Routes */}
+          <Route
+            path="/admin-dashboard"
+            element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            }
+          />
+
+          {/* Fallback */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>
