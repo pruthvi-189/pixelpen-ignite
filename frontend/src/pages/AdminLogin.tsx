@@ -92,10 +92,7 @@ const AdminLogin = () => {
         <p className="text-sm text-center mt-4">
           Don’t have an account?{" "}
           <span
-            className="px-6 py-2 rounded-xl font-semibold text-black
-             bg-[#d4af37] 
-             hover:bg-[#c39c2d]
-             transition-all duration-300 shadow-md"
+            className="text-purple-400 cursor-pointer hover:underline"
             onClick={() => navigate("/signup")}
           >
             Signup

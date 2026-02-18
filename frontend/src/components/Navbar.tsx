@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { UserPlus } from "lucide-react";
 import logo from "@/assets/new logo for startup.png";
 
 const links = [
@@ -18,8 +19,6 @@ export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("adminToken");
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", onScroll);
@@ -28,43 +27,40 @@ export default function Navbar() {
 
   useEffect(() => setMobileOpen(false), [location]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("adminToken");
-    navigate("/");
-  };
-
   return (
     <motion.nav
       initial={{ y: -80 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "glass shadow-lg" : "bg-transparent"
+        scrolled ? "backdrop-blur-md bg-black/40 shadow-lg" : "bg-transparent"
       }`}
     >
       <div className="flex w-full items-center justify-between px-10 py-4">
+
+        {/* Logo */}
         <Link to="/" className="flex items-center gap-3">
           <img src={logo} alt="PixelPen" className="h-10 w-10 object-contain" />
-          <span className="font-display text-xl font-semibold text-foreground">
-            Pixel<span className="text-gradient-gold">Pen</span>
+          <span className="text-xl font-semibold text-white tracking-wide">
+            Pixel<span className="text-[#d4af37]">Pen</span>
           </span>
         </Link>
 
-        {/* Desktop */}
+        {/* Desktop Links */}
         <div className="hidden items-center gap-8 md:flex">
           {links.map((link) => (
             <Link
               key={link.to}
               to={link.to}
-              className={`group relative font-body text-sm font-medium tracking-wide transition-colors duration-300 ${
+              className={`relative text-sm font-medium transition-colors duration-300 ${
                 location.pathname === link.to
-                  ? "text-primary"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "text-[#d4af37]"
+                  : "text-gray-300 hover:text-white"
               }`}
             >
               {link.label}
               <span
-                className={`absolute -bottom-1 left-0 h-[2px] bg-primary transition-all duration-300 ${
+                className={`absolute -bottom-1 left-0 h-[2px] bg-[#d4af37] transition-all duration-300 ${
                   location.pathname === link.to
                     ? "w-full"
                     : "w-0 group-hover:w-full"
@@ -73,106 +69,81 @@ export default function Navbar() {
             </Link>
           ))}
 
-          {/* Auth Buttons */}
-          {!token ? (
-            <>
-              <button
-                onClick={() => navigate("/login")}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground"
-              >
-                Login
-              </button>
+          {/* 🔥 PREMIUM SIGNUP BUTTON */}
+          <motion.button
+            onClick={() => navigate("/signup")}
+            whileHover={{ scale: 1.12 }}
+            whileTap={{ scale: 0.95 }}
+            className="relative ml-4 flex items-center justify-center 
+                       h-11 w-11 rounded-full 
+                       bg-gradient-to-br from-[#f5d76e] via-[#d4af37] to-[#a67c00]
+                       shadow-md hover:shadow-xl
+                       transition-all duration-300"
+          >
+            {/* Shine effect */}
+            <span className="absolute inset-0 rounded-full overflow-hidden">
+              <span className="absolute top-0 left-[-75%] h-full w-1/2 bg-white/20 rotate-12 
+                               animate-[shine_2.5s_infinite]" />
+            </span>
 
-              <button
-                onClick={() => navigate("/signup")}
-                className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded text-sm font-semibold"
-              >
-                Signup
-              </button>
-            </>
-          ) : (
-            <button
-              onClick={handleLogout}
-              className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-sm font-semibold"
-            >
-              Logout
-            </button>
-          )}
+            <UserPlus size={18} strokeWidth={2.5} className="text-black z-10" />
+          </motion.button>
         </div>
 
-        {/* Mobile toggle */}
+        {/* Mobile Toggle */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
           className="flex flex-col gap-1.5 md:hidden"
           aria-label="Toggle menu"
         >
-          <motion.span
-            animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-            className="block h-[2px] w-6 bg-foreground"
-          />
-          <motion.span
-            animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
-            className="block h-[2px] w-6 bg-foreground"
-          />
-          <motion.span
-            animate={mobileOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-            className="block h-[2px] w-6 bg-foreground"
-          />
+          <span className="block h-[2px] w-6 bg-white" />
+          <span className="block h-[2px] w-6 bg-white" />
+          <span className="block h-[2px] w-6 bg-white" />
         </button>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="glass overflow-hidden md:hidden"
+            className="bg-black/90 backdrop-blur-md md:hidden"
           >
             <div className="flex flex-col gap-4 px-6 py-6">
               {links.map((link) => (
                 <Link
                   key={link.to}
                   to={link.to}
-                  className={`font-body text-base transition-colors ${
-                    location.pathname === link.to
-                      ? "text-primary"
-                      : "text-muted-foreground"
-                  }`}
+                  className="text-gray-300 hover:text-white"
                 >
                   {link.label}
                 </Link>
               ))}
 
-              {!token ? (
-                <>
-                  <button
-                    onClick={() => navigate("/login")}
-                    className="text-left text-muted-foreground"
-                  >
-                    Login
-                  </button>
-
-                  <button
-                    onClick={() => navigate("/signup")}
-                    className="bg-purple-600 px-4 py-2 rounded"
-                  >
-                    Signup
-                  </button>
-                </>
-              ) : (
-                <button
-                  onClick={handleLogout}
-                  className="bg-red-600 px-4 py-2 rounded"
-                >
-                  Logout
-                </button>
-              )}
+              <button
+                onClick={() => navigate("/signup")}
+                className="mt-2 rounded-lg bg-gradient-to-r 
+                           from-[#f5d76e] to-[#d4af37] 
+                           text-black py-2 font-semibold"
+              >
+                Signup
+              </button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* 🔥 Shine Animation Keyframe */}
+      <style>
+        {`
+          @keyframes shine {
+            0% { left: -75%; }
+            100% { left: 125%; }
+          }
+        `}
+      </style>
     </motion.nav>
   );
 }
