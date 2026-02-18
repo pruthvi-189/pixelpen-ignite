@@ -15,6 +15,8 @@ import Founder from "./pages/Founder";
 import Partners from "./pages/Partners";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import Signup from "./pages/Signup";
+
 
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -42,9 +44,13 @@ function AnimatedRoutes() {
           <Route path="/founder" element={<Founder />} />
           <Route path="/partners" element={<Partners />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<AdminLogin />} />
+
 
           {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/signup" element={<Signup />} />
 
           <Route
             path="/admin/dashboard"

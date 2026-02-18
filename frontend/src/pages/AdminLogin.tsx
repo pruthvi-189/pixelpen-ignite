@@ -60,7 +60,7 @@ const AdminLogin = () => {
         className="bg-gray-900 p-8 rounded-xl w-96 shadow-lg"
       >
         <h2 className="text-2xl font-bold mb-6 text-center">
-          Admin Login
+          Login
         </h2>
 
         <input
@@ -88,9 +88,23 @@ const AdminLogin = () => {
         >
           {loading ? "Logging in..." : "Login"}
         </button>
-      </form>
+
+        <p className="text-sm text-center mt-4">
+          Don’t have an account?{" "}
+          <span
+            className="px-6 py-2 rounded-xl font-semibold text-black
+             bg-[#d4af37] 
+             hover:bg-[#c39c2d]
+             transition-all duration-300 shadow-md"
+            onClick={() => navigate("/signup")}
+          >
+            Signup
+          </span>
+        </p>
+      </form>s
     </div>
   );
 };
+
 
 export default AdminLogin;

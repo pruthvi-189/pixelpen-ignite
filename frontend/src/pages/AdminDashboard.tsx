@@ -5,7 +5,7 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("adminToken"); // ✅ FIXED KEY
 
     if (!token) {
       navigate("/admin/login");
@@ -13,7 +13,7 @@ const AdminDashboard = () => {
   }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("adminToken"); // ✅ FIXED KEY
     navigate("/admin/login");
   };
 

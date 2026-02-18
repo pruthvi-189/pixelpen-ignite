@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "@/assets/new logo for startup.png";
 
@@ -16,6 +16,9 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const token = localStorage.getItem("adminToken");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -24,6 +27,11 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => setMobileOpen(false), [location]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("adminToken");
+    navigate("/");
+  };
 
   return (
     <motion.nav
@@ -64,6 +72,32 @@ export default function Navbar() {
               />
             </Link>
           ))}
+
+          {/* Auth Buttons */}
+          {!token ? (
+            <>
+              <button
+                onClick={() => navigate("/login")}
+                className="text-sm font-medium text-muted-foreground hover:text-foreground"
+              >
+                Login
+              </button>
+
+              <button
+                onClick={() => navigate("/signup")}
+                className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded text-sm font-semibold"
+              >
+                Signup
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-sm font-semibold"
+            >
+              Logout
+            </button>
+          )}
         </div>
 
         {/* Mobile toggle */}
@@ -110,6 +144,31 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
+
+              {!token ? (
+                <>
+                  <button
+                    onClick={() => navigate("/login")}
+                    className="text-left text-muted-foreground"
+                  >
+                    Login
+                  </button>
+
+                  <button
+                    onClick={() => navigate("/signup")}
+                    className="bg-purple-600 px-4 py-2 rounded"
+                  >
+                    Signup
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-600 px-4 py-2 rounded"
+                >
+                  Logout
+                </button>
+              )}
             </div>
           </motion.div>
         )}

@@ -1,16 +1,25 @@
 {
   "compilerOptions": {
-    "forceConsistentCasingInFileNames": true,
+    "target": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "jsx": "react-jsx",
+
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
-    },
-    "noImplicitAny": false,
-    "noUnusedParameters": false,
-    "skipLibCheck": true,
-    "allowJs": true,
-    "noUnusedLocals": false
+      "@/*": ["src/*"]
+    }
   },
   "include": ["src"]
 }
