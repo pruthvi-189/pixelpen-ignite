@@ -5,6 +5,7 @@ import AnimatedSection from "@/components/AnimatedSection";
 import emailjs from "@emailjs/browser";
 
 const contactInfo = [
+  
   { icon: Phone, label: "Phone", value: "+91 7022363858", href: "tel:+917022363858" },
   {
     icon: Mail,
