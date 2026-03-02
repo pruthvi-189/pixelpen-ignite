@@ -1,0 +1,98 @@
+:root {
+  --gradient-gold: linear-gradient(135deg, hsl(42 48% 57%), hsl(42 60% 70%));
+  --gradient-dark: linear-gradient(180deg, hsl(0 0% 4.3%), hsl(28 36% 8%));
+  --gradient-card: linear-gradient(145deg, hsl(28 30% 9%), hsl(28 30% 6%));
+  --shadow-gold: 0 0 30px hsl(42 48% 57% / 0.15);
+  --shadow-gold-intense: 0 0 50px hsl(42 48% 57% / 0.3);
+}
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--gradient-dark);
+  color: white;
+}
+
+.admin-sidebar {
+  width: 240px;
+  background: #0b0b0b;
+  border-right: 1px solid rgba(255,255,255,0.05);
+  padding: 24px;
+}
+
+.admin-sidebar h2 {
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 40px;
+}
+
+.sidebar-item {
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.sidebar-item:hover,
+.sidebar-item.active {
+  background: var(--gradient-card);
+  box-shadow: var(--shadow-gold);
+}
+
+.admin-main {
+  flex: 1;
+  padding: 30px;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+}
+
+.admin-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--gradient-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: var(--shadow-gold);
+}
+
+.dropdown {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  width: 180px;
+  background: var(--gradient-card);
+  border-radius: 10px;
+  box-shadow: var(--shadow-gold-intense);
+  overflow: hidden;
+}
+
+.dropdown-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.dropdown-item:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+.card {
+  background: var(--gradient-card);
+  padding: 20px;
+  border-radius: 14px;
+  margin-top: 20px;
+  box-shadow: var(--shadow-gold);
+}

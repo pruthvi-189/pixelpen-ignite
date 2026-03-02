@@ -5,6 +5,8 @@ import { UserPlus, User, LogOut, Settings } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
 import logo from "@/assets/new logo for startup.png";
+import Signup from "@/pages/Signup";
+import AdminLogin from "@/pages/AdminLogin";
 
 const links = [
   { to: "/", label: "Home" },
@@ -19,6 +21,8 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -84,7 +88,7 @@ export default function Navbar() {
           {/* 🔥 AUTH SECTION */}
           {!user ? (
             <motion.button
-              onClick={() => navigate("/signup")}
+              onClick={() => setShowSignup(true)}
               whileHover={{ scale: 1.12 }}
               whileTap={{ scale: 0.95 }}
               className="relative ml-4 flex items-center justify-center 
@@ -186,6 +190,24 @@ export default function Navbar() {
           }
         `}
       </style>
+            {showSignup && (
+            <Signup
+              onClose={() => setShowSignup(false)}
+              switchToLogin={() => {
+                setShowSignup(false);
+                setShowLogin(true);
+              }}
+            />
+          )}
+      {showLogin && (
+        <AdminLogin
+          onClose={() => setShowLogin(false)}
+          switchToSignup={() => {
+            setShowLogin(false);
+            setShowSignup(true);
+          }}
+        />
+      )}
     </motion.nav>
   );
 }
