@@ -47,7 +47,8 @@ const AdminLogin = ({ onClose, switchToSignup }: AdminLoginProps) => {
 
       // Redirect based on role
       if (profileData?.role === "admin") {
-        navigate("/admin-dashboard");
+        // Always go to home after login
+        navigate("/");
       } else {
         navigate("/");
       }

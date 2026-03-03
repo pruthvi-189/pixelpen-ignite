@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { UserPlus, User, LogOut, Settings } from "lucide-react";
@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabase";
 import logo from "@/assets/new logo for startup.png";
 import Signup from "@/pages/Signup";
 import AdminLogin from "@/pages/AdminLogin";
+import UserProfileModal from "@/pages/UserProfileModal";
 
 const links = [
   { to: "/", label: "Home" },
@@ -21,8 +22,10 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const profileRef = useRef<HTMLDivElement | null>(null);
   const [showSignup, setShowSignup] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -34,6 +37,22 @@ export default function Navbar() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+  const handleClickOutside = (event: MouseEvent) => {
+    if (!profileRef.current) return;
+
+    if (!profileRef.current.contains(event.target as Node)) {
+      setProfileOpen(false);
+    }
+  };
+
+  document.addEventListener("pointerdown", handleClickOutside, true);
+
+  return () => {
+    document.removeEventListener("pointerdown", handleClickOutside, true);
+  };
+}, []);
 
   useEffect(() => {
     setMobileOpen(false);
@@ -103,7 +122,7 @@ export default function Navbar() {
               <UserPlus size={18} strokeWidth={2.5} className="text-black z-10" />
             </motion.button>
           ) : (
-            <div className="relative ml-4">
+            <div className="relative ml-4" ref={profileRef}>
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
@@ -139,7 +158,10 @@ export default function Navbar() {
 
                     <div className="mt-4 border-t border-gray-700 pt-3 flex flex-col gap-3">
                       <button
-                        onClick={() => navigate("/profile")}
+                        onClick={() => {
+                        setProfileOpen(false);
+                        setShowProfileModal(true);
+                      }}
                         className="flex items-center gap-2 text-sm text-gray-300 hover:text-white"
                       >
                         <Settings size={16} />
@@ -208,6 +230,10 @@ export default function Navbar() {
           }}
         />
       )}
+      <UserProfileModal
+        isOpen={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
+      />
     </motion.nav>
   );
 }
