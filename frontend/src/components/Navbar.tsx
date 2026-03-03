@@ -196,6 +196,7 @@ export default function Navbar() {
         {/* Mobile Toggle */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label="Toggle menu"
           className="flex flex-col gap-1.5 md:hidden"
         >
           <span className="block h-[2px] w-6 bg-white" />

@@ -117,7 +117,10 @@ export default function UserProfileModal({ isOpen, onClose }: Props) {
           className="relative w-[420px] p-8 modal-card"
         >
           <button
+            type="button"
             onClick={onClose}
+            aria-label="Close profile modal"
+            title="Close"
             className="absolute top-4 right-4 text-[#d4af37]"
           >
             <X size={18} />

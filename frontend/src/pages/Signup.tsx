@@ -2,13 +2,12 @@ import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 
-const Signup = ({
-  onClose,
-  switchToLogin,
-}: {
-  onClose: () => void;
-  switchToLogin: () => void;
-}) => {
+interface SignupProps {
+  onClose?: () => void;
+  switchToLogin?: () => void;
+}
+
+const Signup = ({ onClose, switchToLogin }: SignupProps) => {
   const navigate = useNavigate();
 
   const [fullName, setFullName] = useState("");
@@ -45,7 +44,7 @@ const Signup = ({
       return;
     }
 // 🔥 Close modal first
-onClose();
+onClose?.();
 
 // 🔥 Then redirect
 navigate("/");

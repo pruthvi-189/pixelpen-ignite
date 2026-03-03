@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 
 interface AdminLoginProps {
-  onClose: () => void;
-  switchToSignup: () => void;
+  onClose?: () => void;
+  switchToSignup?: () => void;
 }
 
 const AdminLogin = ({ onClose, switchToSignup }: AdminLoginProps) => {
@@ -43,7 +43,7 @@ const AdminLogin = ({ onClose, switchToSignup }: AdminLoginProps) => {
         .single();
 
       // 🔥 CLOSE MODAL IMMEDIATELY
-      onClose();
+      onClose?.();
 
       // Redirect based on role
       if (profileData?.role === "admin") {
@@ -117,8 +117,8 @@ const AdminLogin = ({ onClose, switchToSignup }: AdminLoginProps) => {
           <span
             className="text-[#d4af37] cursor-pointer hover:text-white"
             onClick={() => {
-              onClose();
-              switchToSignup();
+              onClose?.();
+              switchToSignup?.();
             }}
           >
             Signup
