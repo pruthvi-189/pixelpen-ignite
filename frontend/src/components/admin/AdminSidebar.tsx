@@ -1,35 +1,53 @@
 import React from "react";
 
-interface Props {
+type Props = {
   activeTab: string;
   setActiveTab: (tab: string) => void;
-}
+};
 
-const AdminSidebar: React.FC<Props> = ({ activeTab, setActiveTab }) => {
+const AdminSidebar = ({ activeTab, setActiveTab }: Props) => {
   return (
     <div className="admin-sidebar">
-      <h2>PixelPen Admin</h2>
 
-      <div
-        className={`sidebar-item ${activeTab === "dashboard" ? "active" : ""}`}
-        onClick={() => setActiveTab("dashboard")}
-      >
-        Dashboard
+      <div className="sidebar-logo">
+        <div className="logo-circle">P</div>
+
+        <div>
+          <h3>PixelPen Admin</h3>
+          <span>CONSOLE</span>
+        </div>
       </div>
 
-      <div
-        className={`sidebar-item ${activeTab === "events" ? "active" : ""}`}
-        onClick={() => setActiveTab("events")}
-      >
-        Events
+      <div className="sidebar-menu">
+
+        <button
+          className={activeTab === "dashboard" ? "active" : ""}
+          onClick={() => setActiveTab("dashboard")}
+        >
+          Dashboard
+        </button>
+
+        <button
+          className={activeTab === "events" ? "active" : ""}
+          onClick={() => setActiveTab("events")}
+        >
+          Events
+        </button>
+
+        <button
+          className={activeTab === "users" ? "active" : ""}
+          onClick={() => setActiveTab("users")}
+        >
+          Users
+        </button>
+
       </div>
 
-      <div
-        className={`sidebar-item ${activeTab === "users" ? "active" : ""}`}
-        onClick={() => setActiveTab("users")}
-      >
-        Users
+      <div className="sidebar-footer">
+        <p>Need help?</p>
+        <span>View Documentation</span>
       </div>
+
     </div>
   );
 };
