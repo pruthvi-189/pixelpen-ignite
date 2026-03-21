@@ -6,13 +6,17 @@ import { useAuth } from "@/context/AuthContext";
 const AdminHeader: React.FC = () => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const modalRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
   const { profile } = useAuth();
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    navigate("/");
-  };
+  await supabase.auth.signOut();
+
+  // Force redirect BEFORE auth guard kicks in
+  window.location.href = "/";
+};
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -30,6 +34,22 @@ const AdminHeader: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+  const handleClickOutside = (event: MouseEvent) => {
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      setShowNotifications(false);
+    }
+  };
+
+  if (showNotifications) {
+    document.addEventListener("mousedown", handleClickOutside);
+  }
+
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+  }, [showNotifications]);
+
   return (
     <div className="admin-header">
 
@@ -46,7 +66,12 @@ const AdminHeader: React.FC = () => {
       <div className="header-right">
 
         {/* Notification */}
-        <div className="icon-btn">🔔</div>
+        <div
+          className="icon-btn"
+          onClick={() => setShowNotifications(true)}
+        >
+          🔔
+        </div>
 
         {/* Settings */}
         <div className="icon-btn">⚙️</div>
@@ -54,11 +79,10 @@ const AdminHeader: React.FC = () => {
 
         {/* ADMIN INFO */}
         <div className="admin-info">
-          <div>
+          <div className="admin-text">
             <p className="admin-name">
               {profile?.full_name || "Admin User"}
             </p>
-
             <span className="admin-role">
               {profile?.role || "Super Admin"}
             </span>
@@ -120,7 +144,29 @@ const AdminHeader: React.FC = () => {
           </div>
 
         </div>
+        {showNotifications && (
+          <div className="notif-overlay">
 
+            <div className="notif-modal" ref={modalRef}>
+
+              <h3>Notifications</h3>
+
+              <div className="notif-item">
+                🚀 New user registered
+              </div>
+
+              <div className="notif-item">
+                📊 Report generated successfully
+              </div>
+
+              <div className="notif-item">
+                ⚡ Server performance improved
+              </div>
+
+            </div>
+
+          </div>
+        )}
       </div>
 
     </div>
