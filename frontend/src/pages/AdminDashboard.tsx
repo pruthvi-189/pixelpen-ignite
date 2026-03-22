@@ -23,17 +23,20 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="admin-layout">
-      <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+  <div className="admin-layout">
+    <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      <div className="admin-main">
-        <AdminHeader />
+    <div className="admin-main">
+      <AdminHeader />
 
+      {/* ✅ ADD THIS WRAPPER */}
+      <div className="admin-content">
         {activeTab === "dashboard" && <DashboardHome />}
         {activeTab === "events" && <Events />}
         {activeTab === "users" && <Users />}
       </div>
     </div>
+  </div>
   );
 };
 

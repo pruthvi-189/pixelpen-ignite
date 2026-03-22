@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/context/AuthContext";
+import { createPortal } from "react-dom";
 
 const AdminHeader: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -88,6 +89,18 @@ const AdminHeader: React.FC = () => {
             </span>
           </div>
 
+          {showNotifications && (
+            <div className="notif-overlay">
+              <div className="notif-modal" ref={modalRef}>
+                <h3>Notifications</h3>
+
+                <div className="notif-item">🚀 New user registered</div>
+                <div className="notif-item">📊 Report generated successfully</div>
+                <div className="notif-item">⚡ Server performance improved</div>
+              </div>
+            </div>
+          )}
+
           {/* AVATAR + DROPDOWN */}
           <div className="dropdown-wrapper" ref={dropdownRef}>
 
@@ -144,29 +157,29 @@ const AdminHeader: React.FC = () => {
           </div>
 
         </div>
-        {showNotifications && (
-          <div className="notif-overlay">
 
-            <div className="notif-modal" ref={modalRef}>
+          {showNotifications &&
+            createPortal(
+              <div className="notif-overlay">
+                <div className="notif-modal" ref={modalRef}>
+                  <h3>Notifications</h3>
 
-              <h3>Notifications</h3>
+                  <div className="notif-item">
+                    🚀 New user registered
+                  </div>
 
-              <div className="notif-item">
-                🚀 New user registered
-              </div>
+                  <div className="notif-item">
+                    📊 Report generated successfully
+                  </div>
 
-              <div className="notif-item">
-                📊 Report generated successfully
-              </div>
-
-              <div className="notif-item">
-                ⚡ Server performance improved
-              </div>
-
-            </div>
-
-          </div>
-        )}
+                  <div className="notif-item">
+                    ⚡ Server performance improved
+                  </div>
+                </div>
+              </div>,
+              document.body
+            )
+          }
       </div>
 
     </div>
