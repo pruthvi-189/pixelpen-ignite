@@ -23,7 +23,7 @@ const AdminDashboard = () => {
   }
 
   return (
-  <div className="admin-layout">
+  <div className="admin-dashboard-layout">
     <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
     <div className="admin-main">
