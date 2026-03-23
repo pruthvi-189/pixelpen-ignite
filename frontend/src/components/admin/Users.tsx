@@ -3,6 +3,7 @@ import { supabase } from "@/lib/supabase";
 
 const Users = () => {
   const [users, setUsers] = useState<any[]>([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     fetchUsers();
@@ -23,36 +24,108 @@ const Users = () => {
     setUsers(data || []);
   };
 
+  const filteredUsers = users.filter((user) =>
+    user.full_name?.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
-    <div className="admin-page">
+    <div className="p-6">
 
-      <h2>Users</h2>
+      {/* Card container */}
+      <div className="bg-card border border-border rounded-2xl shadow-lg">
 
-      <table className="admin-table">
+        {/* Header */}
+        <div className="px-6 py-4 border-b border-border flex justify-between items-center">
 
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Mobile</th>
-            <th>Role</th>
-          </tr>
-        </thead>
+          {/* Left side */}
+          <h2 className="text-xl font-semibold">
+            Users
+          </h2>
 
-        <tbody>
+          {/* Right side search */}
+          <input
+            type="text"
+            placeholder="Search by name..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="
+              bg-muted
+              border border-border
+              rounded-lg
+              px-4 py-2
+              text-sm
+              outline-none
+              focus:ring-2
+              focus:ring-yellow-500/40
+              transition
+            "
+          />
 
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>{user.full_name}</td>
-              <td>{user.email}</td>
-              <td>{user.mobile_number}</td>
-              <td>{user.role}</td>
-            </tr>
-          ))}
+        </div>
 
-        </tbody>
+        {/* Table */}
+        <div className="w-full">
 
-      </table>
+          <table className="w-full text-sm">
+
+            <thead className="bg-muted text-muted-foreground">
+              <tr>
+                <th className="text-left px-6 py-3">Name</th>
+                <th className="text-left px-6 py-3">Email</th>
+                <th className="text-left px-6 py-3">Mobile</th>
+                <th className="text-left px-6 py-3">Role</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              {users.map((user) => (
+                <tr
+                  key={user.id}
+                  className="
+                    border-t border-border
+                    transition-all duration-300
+                    hover:bg-[#FFD70008]
+                    hover:shadow-[0_0_12px_rgba(255,215,0,0.25)]
+                    hover:scale-[1.01]
+                    cursor-pointer
+                  "
+                >
+                  <td className="px-6 py-3 font-medium">
+                    {user.full_name}
+                  </td>
+
+                  <td className="px-6 py-3 text-muted-foreground">
+                    {user.email}
+                  </td>
+
+                  <td className="px-6 py-3">
+                    {user.mobile_number}
+                  </td>
+
+                  <td className="px-6 py-3">
+
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        user.role === "admin"
+                          ? "bg-yellow-500/20 text-yellow-400"
+                          : "bg-blue-500/20 text-blue-400"
+                      }`}
+                    >
+                      {user.role}
+                    </span>
+
+                  </td>
+                </tr>
+              ))}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
 
     </div>
   );
