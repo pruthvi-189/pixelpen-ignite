@@ -18,7 +18,7 @@ import NotFound from "./pages/NotFound";
 import Signup from "./pages/Signup";
 import AdminLogin from "./pages/AdminLogin"; // You can rename to Login later
 import AdminDashboard from "./pages/AdminDashboard";
-import Profile from "./pages/Profile";
+import Profile from "./pages/UserProfileModal";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./pages/AdminRoute";
@@ -56,14 +56,14 @@ function AnimatedRoutes() {
 
 
           {/* Protected User Routes */}
-          <Route
+          {/*<Route
             path="/profile"
             element={
               <ProtectedRoute>
                 <Profile />
               </ProtectedRoute>
             }
-          />
+          />*/}
 
           {/* Admin Only Routes */}
           <Route

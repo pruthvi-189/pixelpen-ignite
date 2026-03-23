@@ -2,7 +2,12 @@ import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 
-const Signup = () => {
+interface SignupProps {
+  onClose?: () => void;
+  switchToLogin?: () => void;
+}
+
+const Signup = ({ onClose, switchToLogin }: SignupProps) => {
   const navigate = useNavigate();
 
   const [fullName, setFullName] = useState("");
@@ -22,7 +27,7 @@ const Signup = () => {
       return;
     }
 
-    const { data, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -38,18 +43,33 @@ const Signup = () => {
       setLoading(false);
       return;
     }
+// 🔥 Close modal first
+onClose?.();
 
-    alert("Signup successful! Please check your email.");
-    navigate("/login");
-    setLoading(false);
+// 🔥 Then redirect
+navigate("/");
+
+// Stop loading
+setLoading(false);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black text-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-black/60">
       <form
         onSubmit={handleSignup}
-        className="bg-gray-900 p-8 rounded-xl w-96 shadow-lg"
+        className="relative w-96 p-8 rounded-2xl text-white"
+        style={{
+          background: "linear-gradient(145deg, hsl(28 30% 9%), hsl(28 30% 6%))",
+          boxShadow: "0 0 30px hsl(42 48% 57% / 0.15)",
+        }}
       >
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute top-4 right-4 text-[#d4af37] text-xl hover:scale-110 transition"
+          >
+            ✕
+          </button>
         <h2 className="text-2xl font-bold mb-6 text-center">
           Create Account
         </h2>
@@ -57,7 +77,7 @@ const Signup = () => {
         <input
           type="text"
           placeholder="Full Name"
-          className="w-full p-3 mb-4 rounded bg-gray-800 border border-gray-700"
+         className="w-full p-3 mb-4 rounded-lg bg-black/40 border border-[#d4af37]/30 focus:border-[#d4af37] outline-none transition"
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           required
@@ -66,7 +86,7 @@ const Signup = () => {
         <input
           type="text"
           placeholder="Mobile Number"
-          className="w-full p-3 mb-4 rounded bg-gray-800 border border-gray-700"
+          className="w-full p-3 mb-4 rounded-lg bg-black/40 border border-[#d4af37]/30 focus:border-[#d4af37] outline-none transition"
           value={mobile}
           onChange={(e) => setMobile(e.target.value)}
           required
@@ -75,7 +95,7 @@ const Signup = () => {
         <input
           type="email"
           placeholder="Email"
-          className="w-full p-3 mb-4 rounded bg-gray-800 border border-gray-700"
+          className="w-full p-3 mb-4 rounded-lg bg-black/40 border border-[#d4af37]/30 focus:border-[#d4af37] outline-none transition"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -84,7 +104,7 @@ const Signup = () => {
         <input
           type="password"
           placeholder="Password"
-          className="w-full p-3 mb-4 rounded bg-gray-800 border border-gray-700"
+          className="w-full p-3 mb-4 rounded-lg bg-black/40 border border-[#d4af37]/30 focus:border-[#d4af37] outline-none transition"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
@@ -93,7 +113,7 @@ const Signup = () => {
         <input
           type="password"
           placeholder="Confirm Password"
-          className="w-full p-3 mb-6 rounded bg-gray-800 border border-gray-700"
+          className="w-full p-3 mb-6 rounded-lg bg-black/40 border border-[#d4af37]/30 focus:border-[#d4af37] outline-none transition"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
@@ -101,7 +121,10 @@ const Signup = () => {
 
         <button
           type="submit"
-          className="w-full bg-purple-600 hover:bg-purple-700 p-3 rounded font-semibold"
+          className="w-full p-3 rounded-lg font-semibold text-black transition-all"
+          style={{
+            background: "linear-gradient(135deg, hsl(42 48% 57%), hsl(42 60% 70%))",
+          }}
           disabled={loading}
         >
           {loading ? "Signing up..." : "Signup"}
@@ -110,8 +133,8 @@ const Signup = () => {
         <p className="text-sm text-center mt-4">
           Already have an account?{" "}
           <span
-            className="text-purple-400 cursor-pointer"
-            onClick={() => navigate("/login")}
+            className="text-[#d4af37] hover:underline cursor-pointer"
+            onClick={switchToLogin}
           >
             Login
           </span>

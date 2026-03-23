@@ -1,10 +1,19 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
+import "@/styles/admin.css";
+
+import AdminHeader from "@/components/admin/AdminHeader";
+import AdminSidebar from "@/components/admin/AdminSidebar";
+import DashboardHome from "@/components/admin/DashboardHome";
+import Events from "@/components/admin/Events";
+import Users from "@/components/admin/Users";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const { user, profile, loading } = useAuth();
+  const [activeTab, setActiveTab] = useState("dashboard");
 
   if (loading) return null;
 
@@ -13,27 +22,21 @@ const AdminDashboard = () => {
     return null;
   }
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    navigate("/");
-  };
-
   return (
-    <div className="min-h-screen bg-black text-white p-8">
-      <div className="flex justify-between items-center mb-10">
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-        <button
-          onClick={handleLogout}
-          className="bg-red-600 px-4 py-2 rounded"
-        >
-          Logout
-        </button>
-      </div>
+  <div className="admin-dashboard-layout">
+    <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      <div className="bg-gray-900 p-6 rounded-xl">
-        <p>Welcome to PixelPen Admin Panel 🚀</p>
+    <div className="admin-main">
+      <AdminHeader />
+
+      {/* ✅ ADD THIS WRAPPER */}
+      <div className="admin-content">
+        {activeTab === "dashboard" && <DashboardHome />}
+        {activeTab === "events" && <Events />}
+        {activeTab === "users" && <Users />}
       </div>
     </div>
+  </div>
   );
 };
 
