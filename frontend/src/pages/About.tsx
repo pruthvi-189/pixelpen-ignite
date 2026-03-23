@@ -137,9 +137,9 @@ function TypingText({
   return <p className={className}>{displayedText}</p>;
 }
 
-/* ============================= */
+/* ============================ */
 /* 🚀 ABOUT PAGE */
-/* ============================= */
+/* ============================ */
 export default function About() {
   return (
     <div className="min-h-screen pt-28 pb-20">
