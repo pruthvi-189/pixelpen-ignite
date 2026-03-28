@@ -105,7 +105,7 @@ const AdminLogin = ({ onClose, switchToSignup }: AdminLoginProps) => {
             className="w-full py-3 rounded-lg font-semibold text-black transition-all hover:scale-[1.02]"
             style={{
               background:
-                "linear-gradient(135deg, hsl(42 48% 57%), hsl(42 60% 70%))",
+                "linear-gradient(135deg, #cfae2c, #ffe27a)",
             }}
           >
             {loading ? "Logging in..." : "Login"}

@@ -19,6 +19,7 @@ import Signup from "./pages/Signup";
 import AdminLogin from "./pages/AdminLogin"; // You can rename to Login later
 import AdminDashboard from "./pages/AdminDashboard";
 import Profile from "./pages/UserProfileModal";
+import AuthLayout from "./pages/AuthLayout";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./pages/AdminRoute";
@@ -35,10 +36,22 @@ function AnimatedRoutes() {
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        key={location.pathname}
-        initial={{ opacity: 0, y: 12 }}
+        key={
+          location.pathname === "/login" || location.pathname === "/signup"
+            ? "auth-layout"
+            : location.pathname
+        }
+        initial={
+          location.pathname === "/login" || location.pathname === "/signup"
+            ? { opacity: 1, y: 0 }
+            : { opacity: 0, y: 12 }
+        }
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -12 }}
+        exit={
+          location.pathname === "/login" || location.pathname === "/signup"
+            ? { opacity: 1, y: 0 }
+            : { opacity: 0, y: -12 }
+        }
         transition={{ duration: 0.35, ease: "easeInOut" }}
       >
         <Routes location={location}>
@@ -49,8 +62,7 @@ function AnimatedRoutes() {
           <Route path="/founder" element={<Founder />} />
           <Route path="/partners" element={<Partners />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<AdminLogin />} />
+          <Route path="/auth" element={<AuthLayout />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
 

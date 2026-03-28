@@ -123,7 +123,7 @@ setLoading(false);
           type="submit"
           className="w-full p-3 rounded-lg font-semibold text-black transition-all"
           style={{
-            background: "linear-gradient(135deg, hsl(42 48% 57%), hsl(42 60% 70%))",
+            background: "linear-gradient(135deg, #cfae2c, #ffe27a)",
           }}
           disabled={loading}
         >

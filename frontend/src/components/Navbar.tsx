@@ -5,8 +5,6 @@ import { UserPlus, User, LogOut, Settings } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
 import logo from "@/assets/new logo for startup.png";
-import Signup from "@/pages/Signup";
-import AdminLogin from "@/pages/AdminLogin";
 import UserProfileModal from "@/pages/UserProfileModal";
 
 const links = [
@@ -23,8 +21,6 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement | null>(null);
-  const [showSignup, setShowSignup] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
 
   const location = useLocation();
@@ -107,7 +103,7 @@ export default function Navbar() {
           {/* 🔥 AUTH SECTION */}
           {!user ? (
             <motion.button
-              onClick={() => setShowSignup(true)}
+              onClick={() => navigate("/auth")}
               whileHover={{ scale: 1.12 }}
               whileTap={{ scale: 0.95 }}
               className="relative ml-4 flex items-center justify-center 
@@ -213,24 +209,7 @@ export default function Navbar() {
           }
         `}
       </style>
-            {showSignup && (
-            <Signup
-              onClose={() => setShowSignup(false)}
-              switchToLogin={() => {
-                setShowSignup(false);
-                setShowLogin(true);
-              }}
-            />
-          )}
-      {showLogin && (
-        <AdminLogin
-          onClose={() => setShowLogin(false)}
-          switchToSignup={() => {
-            setShowLogin(false);
-            setShowSignup(true);
-          }}
-        />
-      )}
+            
       <UserProfileModal
         isOpen={showProfileModal}
         onClose={() => setShowProfileModal(false)}
