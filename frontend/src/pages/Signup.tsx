@@ -46,6 +46,7 @@ const Signup = ({ onClose, switchToLogin }: SignupProps) => {
 // 🔥 Close modal first
 onClose?.();
 
+
 // 🔥 Then redirect
 navigate("/");
 
